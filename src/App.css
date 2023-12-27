@@ -49,6 +49,7 @@
 
 .endgame_overlay {
   position: fixed;
+  overflow-y: scroll;
   top: 65%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -57,4 +58,18 @@
   padding: 20px;
   borderRadius: 8px;
   zIndex: 999,
+}
+.Warning {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+  color: #000;
+  padding: 20px;
+  borderRadius: 8px;
+  zIndex: 999;
+  border: 1px solid red;
 }
