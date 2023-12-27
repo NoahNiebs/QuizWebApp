@@ -1,8 +1,9 @@
 React Quiz Web app that tests users on questions from Open Trivia database. The users will be able to specify, the amount, dificulty, type of question (true/false or multiple choice), and topic. Following the quiz they will be presented the questions they have gotten correct and incorrect, then an overall percentage.
 
-To start the application, follow these steps
+<b>To start the application, follow these steps</b>
 
 npm install
+
 npm start
 
 The app will then run in localhost:3000 if steps above go accordingly
