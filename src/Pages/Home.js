@@ -13,7 +13,7 @@ export function isValidPositiveInteger(input) {
 export const Home = () => {
 
     const [questionsSet, setQuestionsSet] = useState(false);
-    const [difficulty, setDifficulty] = useState(null);
+    const [difficulty, setDifficulty] = useState(NONE);
     const [questionType, setQuestionType] = useState(NONE);
     const [category, setCategory] = useState(NONE);
     const [numberOfQuestions, setNumberOfQuestions] = useState(NONE);
@@ -50,12 +50,11 @@ export const Home = () => {
             let questionParameter = EMPTY_PARAMETER
             let difficultyParameter = EMPTY_PARAMETER
             let categoryParameter = EMPTY_PARAMETER
-            let questionTypeParameter = 10
+            let questionTypeParameter = EMPTY_PARAMETER
             if (numberOfQuestions !== NONE){questionParameter = "amount=" + numberOfQuestions}
             if (difficulty !==NONE) {difficultyParameter = "&difficulty=" + difficulty}
             if(category !== NONE) {categoryParameter = "&category=" + category}
             if(questionType!==NONE){questionTypeParameter = "&type=" + questionType}
-
 
 
             const request = "https://opentdb.com/api.php?" +
@@ -63,6 +62,7 @@ export const Home = () => {
                 categoryParameter+
                 difficultyParameter+
                 questionTypeParameter
+
             setLoadingOverlay(true)
             fetch(request).then(
                 async responses => {
@@ -164,43 +164,6 @@ export const Home = () => {
             </div>)}
         </>;
     }
-
-    function NoQuestionsLoadedDisplay() {
-        return (<div className="home-page">
-            <b>No Questions are loaded, what would you like to be quizzed on today?</b>
-            <b>Category</b>
-            <select onChange={e => setCategory(e.target.value)}>
-                <option>Select a category</option>
-                <option value="9">General Knowledge</option>
-                <option value="17">Science & Nature</option>
-                <option value="21">Sports</option>
-                <option value="25">Art</option>
-                <option value="23">History</option>
-            </select>
-            <b>Difficulty</b>
-            <select onChange={e => setDifficulty(e.target.value)}>
-                <option>Select a difficulty</option>
-                <option value="easy">Easy</option>
-                <option value="medium">Medium</option>
-                <option value="hard">Hard</option>
-            </select>
-            <b>Number of questions</b>
-            <input type="text" onChange={e => setNumberOfQuestions(e.target.value)}></input>
-            <b>Question Type</b>
-            <div className="form-check" onChange={e => setQuestionType(e.target.id)}>
-                <input type={"radio"} className="form-check-input" name="questionTypeSelection"
-                       id="boolean"></input>
-                <label className={"form-check-label"}>True/False</label>
-            </div>
-            <div className="form-check" onChange={e => setQuestionType(e.target.id)}>
-                <input type={"radio"} className="form-check-input" name="questionTypeSelection"
-                       id={"multiple"}></input>
-                <label className={"form-check-label"}>Multiple Choice</label>
-            </div>
-            <input type="submit" onClick={handleSubmit}/>
-        </div>)
-    }
-
     function EndGameOverlay() {
         return (<div className="endgame-overlay">
             <b>You got {quizScore}% of the questions correct</b>
@@ -235,7 +198,7 @@ export const Home = () => {
             <b>No Questions are loaded, what would you like to be quizzed on today?</b>
             <b>Category</b>
             <select onChange={e => setCategory(e.target.value)}>
-                <option>Select a category</option>
+                <option value={NONE}>Any category</option>
                 <option value="9">General Knowledge</option>
                 <option value="17">Science & Nature</option>
                 <option value="21">Sports</option>
@@ -244,12 +207,12 @@ export const Home = () => {
             </select>
             <b>Difficulty</b>
             <select onChange={e => setDifficulty(e.target.value)}>
-                <option>Select a difficulty</option>
+                <option value={NONE}>Any difficulty</option>
                 <option value="easy">Easy</option>
                 <option value="medium">Medium</option>
                 <option value="hard">Hard</option>
             </select>
-            <b>Number of questions</b>
+            <b>Number of questions *Required</b>
             <input type="text" onChange={e => setNumberOfQuestions(e.target.value)}></input>
             <b>Question Type</b>
             <div className="form-check" onChange={e => setQuestionType(e.target.id)}>
@@ -261,6 +224,11 @@ export const Home = () => {
                 <input type={"radio"} className="form-check-input" name="questionTypeSelection"
                        id={"multiple"}></input>
                 <label className={"form-check-label"}>Multiple Choice</label>
+            </div>
+            <div className="form-check" onChange={e => setQuestionType(e.target.id)}>
+                <input type={"radio"} className="form-check-input" name="questionTypeSelection"
+                       id={NONE}></input>
+                <label className={"form-check-label"}>Both</label>
             </div>
             <input type="submit" onClick={handleSubmit}/>
         </div>)}

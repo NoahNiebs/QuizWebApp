@@ -16,3 +16,5 @@ This is a basic implementation, due to time constraints if there were more time 
 3.) Dark Mode
 
 4.) When pulling from the API, the input will often have web spaces or other artifacts that do not belong, so they should be cleaned upon arrival.
+
+5.) The final component which gathers user information for the quiz itself can be refactored into its own component. When I attempt to extract it tough the input fields keep on updating to their initial values when typing into it. 

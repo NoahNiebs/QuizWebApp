@@ -49,9 +49,10 @@
 
 .endgame-overlay {
   position: fixed;
-  overflow-y: scroll;
-  top: 65%;
+  overflow: scroll;
+  top:50%;
   left: 50%;
+  bottom: 1%;
   transform: translate(-50%, -50%);
   background: #ffffff;
   color: #000;
