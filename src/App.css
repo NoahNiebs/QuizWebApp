@@ -52,12 +52,12 @@
   overflow-y: scroll;
   top: 65%;
   left: 50%;
+  height: 90%;
   transform: translate(-50%, -50%);
   background: #ffffff;
   color: #000;
   padding: 20px;
-  borderRadius: 8px;
-  zIndex: 999,
+  border: 1px solid blue;
 }
 .Warning {
   position: fixed;
@@ -69,7 +69,5 @@
   background: #ffffff;
   color: #000;
   padding: 20px;
-  borderRadius: 8px;
-  zIndex: 999;
   border: 1px solid red;
 }

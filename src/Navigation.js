@@ -8,13 +8,7 @@ export const Navigation = () => {
                         <Link to="/">Home</Link>
                     </ul>
                     <ul className="nav-item">
-                        <Link to="/Customize">Customize</Link>
-                    </ul>
-                    <ul className="nav-item">
                         <Link to="/Leaderboard">Leaderboard</Link>
-                    </ul>
-                    <ul className="nav-item">
-                        <Link to="/Play">Play</Link>
                     </ul>
                 </ul>
             </nav>

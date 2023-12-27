@@ -1,22 +1,24 @@
-import {Navigation} from "./Navigation";
+import {Navigation} from "../Navigation";
 import {useState} from "react";
 
-export function verifyInputIsWholePositiveAndNumerical(input) {
-    return !(/[a-zA-Z]/.test(input) ||
-        Number(input < 0) ||
+
+const NONE = "None"
+
+export function isValidPositiveInteger(input) {
+    return !(/[a-zA-Z.]/.test(input) ||
+        Number(input <= 0) ||
         Number(Math.floor(Number(input))) !== Number(input));
 }
 
 export const Home = () => {
 
     const [questionsSet, setQuestionsSet] = useState(false);
-    const [difficulty, setDifficulty] = useState("None");
-    const [questionType, setQuestionType] = useState("None");
-    const [category, setCategory] = useState("None");
-    const [numberOfQuestions, setNumberOfQuestions] = useState("");
+    const [difficulty, setDifficulty] = useState(null);
+    const [questionType, setQuestionType] = useState(NONE);
+    const [category, setCategory] = useState(NONE);
+    const [numberOfQuestions, setNumberOfQuestions] = useState(NONE);
 
     const [questions, setQuestions] = useState([]);
-    const [answeredQuestions, setAnsweredQuestion] = useState({})
     const [quizIsDone, setQuizIsDone] = useState(false)
     const [quizScore, setQuizScore] = useState(0)
     const [correctQuestions, setCorrectQuestions] = useState([])
@@ -37,14 +39,28 @@ export const Home = () => {
     function handleSubmit() {
 
 
-        if (!verifyInputIsWholePositiveAndNumerical(numberOfQuestions)) {
+        if (!isValidPositiveInteger(numberOfQuestions)) {
             setIsBadNumericalInput(true)
         } else {
+
+            //If the user has specified a parameter, it will be used, otherwise it will be
+            // ignored other than number of questions which defaults to 10.
+            let questionParameter = ''
+            let difficultyParameter = ''
+            let categoryParameter = ''
+            let questionTypeParameter = 10
+            if (numberOfQuestions !== NONE){questionParameter = "amount=" + numberOfQuestions}
+            if (difficulty !==NONE) {difficultyParameter = "&difficulty=" + difficulty}
+            if(category !== NONE) {categoryParameter = "&category=" + category}
+            if(questionType!==NONE){questionTypeParameter = "&type=" + questionType}
+
+
+
             const request = "https://opentdb.com/api.php?" +
-                "amount=" + numberOfQuestions +
-                "&category=" + category +
-                "&difficulty=" + difficulty +
-                "&type=" + questionType
+                questionParameter+
+                categoryParameter+
+                difficultyParameter+
+                questionTypeParameter
 
             fetch(request).then(
                 async responses => {
@@ -139,67 +155,8 @@ export const Home = () => {
         </>;
     }
 
-    const NoQuestionsLoadedDisplay = () => {
+    function NoQuestionsLoadedDisplay() {
         return (<div className="HomePage">
-                <b>No Questions are loaded, what would you like to be quizzed on today?</b>
-                <b>Category</b>
-                <select onChange={e => setCategory(e.target.value)}>
-                    <option>Select a category</option>
-                    <option value="9">General Knowledge</option>
-                    <option value="17">Science & Nature</option>
-                    <option value="21">Sports</option>
-                    <option value="25">Art</option>
-                    <option value="23">History</option>
-                </select>
-                <b>Difficulty</b>
-                <select onChange={e => setDifficulty(e.target.value)}>
-                    <option>Select a difficulty</option>
-                    <option value="easy">Easy</option>
-                    <option value="medium">Medium</option>
-                    <option value="hard">Hard</option>
-                </select>
-                <b>Number of questions</b>
-                <input type="text" onChange={e => setNumberOfQuestions(e.target.value)}></input>
-                <b>Question Type</b>
-                <div className="form-check" onChange={e => setQuestionType(e.target.id)}>
-                    <input type={"radio"} className="form-check-input" name="questionTypeSelection"
-                           id="boolean"></input>
-                    <label className={"form-check-label"}>True/False</label>
-                </div>
-                <div className="form-check" onChange={e => setQuestionType(e.target.id)}>
-                    <input type={"radio"} className="form-check-input" name="questionTypeSelection"
-                           id={"multiple"}></input>
-                    <label className={"form-check-label"}>Multiple Choice</label>
-                </div>
-                <input type="submit" onClick={handleSubmit}/>
-            </div>)
-    }
-
-    function EndGameOverlay() {
-        return (<div className="endgame_overlay">
-            <b>You got {quizScore}% of the questions correct</b>
-            <br/>
-            <b>Correct Questions:</b>
-            {correctQuestions.map(question => <div><i>{question}</i> <br/></div>)}
-            <br/>
-            <b>Incorrect Questions (Your answer shown alongside):</b>
-            {incorrectQuestions.map(question => <div><i>{question}</i><br/></div>)}
-            <button onClick={endQuiz} className={"btn btn-primary"}>Done Reviewing Feedback</button>
-        </div>);
-    }
-
-    function BadNumericalInput() {
-        return <div className={"Warning"}>
-            <b>The amount of questions must be a number above 0</b>
-            <button onClick={e => setIsBadNumericalInput(false)}>Confirm</button>
-        </div>;
-    }
-
-    //Home page html
-    return (
-        <div>
-        <Navigation/>
-        {!questionsSet && (<div className="HomePage">
             <b>No Questions are loaded, what would you like to be quizzed on today?</b>
             <b>Category</b>
             <select onChange={e => setCategory(e.target.value)}>
@@ -231,7 +188,34 @@ export const Home = () => {
                 <label className={"form-check-label"}>Multiple Choice</label>
             </div>
             <input type="submit" onClick={handleSubmit}/>
-        </div>)}
+        </div>)
+    }
+
+    function EndGameOverlay() {
+        return (<div className="endgame_overlay">
+            <b>You got {quizScore}% of the questions correct</b>
+            <br/>
+            <b>Correct Questions:</b>
+            {correctQuestions.map(question => <div><i>{question}</i> <br/></div>)}
+            <br/>
+            <b>Incorrect Questions (Your answer shown alongside):</b>
+            {incorrectQuestions.map(question => <div><i>{question}</i><br/></div>)}
+            <button onClick={endQuiz} className={"btn btn-primary"}>Done Reviewing Feedback</button>
+        </div>);
+    }
+
+    function BadNumericalInput() {
+        return <div className={"Warning"}>
+            <b>The amount of questions must be a whole number above 0, no decimals </b>
+            <button onClick={e => setIsBadNumericalInput(false)}>Confirm</button>
+        </div>;
+    }
+
+    //Home page html
+    return (
+        <div>
+        <Navigation/>
+        {!questionsSet && <NoQuestionsLoadedDisplay/>}
         {questionsSet && <QuestionDisplay/>}
         {quizIsDone && <EndGameOverlay/>}
             {isBadNumericalInput && <BadNumericalInput/>}

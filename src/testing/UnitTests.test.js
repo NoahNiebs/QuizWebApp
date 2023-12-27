@@ -1,17 +1,17 @@
 import {expect, jest, test} from '@jest/globals';
-import {verifyInputIsWholePositiveAndNumerical} from '../Home.js'
+import {isValidPositiveInteger} from '../Pages/Home.js'
 test('Characters in number of questions', () => {
-    expect(verifyInputIsWholePositiveAndNumerical("ff")).toBe(false);
+    expect(isValidPositiveInteger("ff")).toBe(false);
 });
 
 test('Negative number of questions', () => {
-    expect(verifyInputIsWholePositiveAndNumerical("-5")).toBe(false);
+    expect(isValidPositiveInteger("-5")).toBe(false);
 });
 
 test('Non whole number of questions', () => {
-    expect(verifyInputIsWholePositiveAndNumerical("2.5")).toBe(false);
+    expect(isValidPositiveInteger("2.5")).toBe(false);
 })
 
 test('Valid Number of questions', () => {
-    expect(verifyInputIsWholePositiveAndNumerical("5")).toBe(true);
+    expect(isValidPositiveInteger("5")).toBe(true);
 });
