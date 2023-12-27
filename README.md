@@ -1,4 +1,4 @@
-Hello - this is a react Quiz Web app that tests users on questions from the Open Trivia database. Users can specify the dificulty, number, type, and topic of their questions and once finished will be presented with what they had gotten correct/incorrect and an overall score. 
+Hello - this is a quiz web app built with React that tests users on questions from the Open Trivia database. Users can specify the dificulty, number, type, and topic of their questions and once finished will be presented with what they had gotten correct/incorrect and an overall score. 
 
 
 <b>To start the application, follow these steps</b>
