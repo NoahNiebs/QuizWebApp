@@ -9,7 +9,7 @@ npm start
 
 The app will then run in localhost:3000 if steps above go accordingly
 
-This is a basic implementation, due to time constraints if there were more time the following would be completed
+<b>This is a basic implementation, due to time constraints if there were more time the following would be completed </b>
 
 1.) Following each quiz, the user will be given the option to submit a name which will be saved over Local Storage and would be displayed over the leaderboard.
 
