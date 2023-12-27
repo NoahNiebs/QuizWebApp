@@ -36,3 +36,13 @@
     transform: rotate(360deg);
   }
 }
+.HomePage {
+  display: flex;
+  flex-direction: column;
+  background-color: whitesmoke;
+  margin-left: 20%;
+  margin-top: 10%;
+  margin-right: 20%;
+  height: 90%;
+  width: 60%;
+}
