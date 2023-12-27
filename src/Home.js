@@ -1,6 +1,12 @@
 import {Navigation} from "./Navigation";
 import {useState} from "react";
 
+export function verifyInputIsWholePositiveAndNumerical(input) {
+    return !(/[a-zA-Z]/.test(input) ||
+        Number(input < 0) ||
+        Number(Math.floor(Number(input))) !== Number(input));
+}
+
 export const Home = () => {
 
     const [questionsSet, setQuestionsSet] = useState(false);
@@ -26,10 +32,12 @@ export const Home = () => {
         }
     }
 
+
+
     function handleSubmit() {
-        if (/[a-zA-Z]/.test(numberOfQuestions) && (
-            Number(numberOfQuestions < 0) ||
-            Number(Math.floor(Number(numberOfQuestions))) !== Number(numberOfQuestions))) {
+
+
+        if (!verifyInputIsWholePositiveAndNumerical(numberOfQuestions)) {
             setIsBadNumericalInput(true)
         } else {
             const request = "https://opentdb.com/api.php?" +
