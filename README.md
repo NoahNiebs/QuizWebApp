@@ -20,3 +20,5 @@ The app will then run in localhost:3000 if steps above go accordingly
 4.) When pulling from the API, the input will often have web spaces or other artifacts that do not belong, so they should be cleaned upon arrival.
 
 5.) The final component which gathers user information for the quiz itself can be refactored into its own component. When I attempt to extract it tough the input fields keep on updating to their initial values when typing into it. 
+
+6.) More comprehensive tests to test the state of the components at various stages of the quiz taking process.
