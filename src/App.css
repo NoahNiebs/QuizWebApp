@@ -36,7 +36,7 @@
     transform: rotate(360deg);
   }
 }
-.HomePage {
+.home-page {
   display: flex;
   flex-direction: column;
   background-color: whitesmoke;
@@ -47,22 +47,19 @@
   width: 60%;
 }
 
-.endgame_overlay {
+.endgame-overlay {
   position: fixed;
   overflow-y: scroll;
   top: 65%;
   left: 50%;
-  height: 90%;
   transform: translate(-50%, -50%);
   background: #ffffff;
   color: #000;
   padding: 20px;
   border: 1px solid blue;
 }
-.Warning {
+.warning {
   position: fixed;
-  display: flex;
-  align-items: center;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -70,4 +67,14 @@
   color: #000;
   padding: 20px;
   border: 1px solid red;
+}
+
+.loading-screen{
+  position:fixed;
+  top: 50%;
+  left: 50%;
+  background-color: white;
+  transform: translate(-50%, -50%);
+  border: 1px solid #3a3939;
+  padding: 20px;
 }

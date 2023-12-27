@@ -24,6 +24,7 @@ export const Home = () => {
     const [correctQuestions, setCorrectQuestions] = useState([])
     const [incorrectQuestions, setIncorrectQuestions] = useState([])
     const [isBadNumericalInput, setIsBadNumericalInput] = useState(false)
+    const [isLoadingOverlayPresent, setLoadingOverlay] = useState(false)
 
 
     function randomize_list(correctAndIncorrectAnswers) {
@@ -45,9 +46,10 @@ export const Home = () => {
 
             //If the user has specified a parameter, it will be used, otherwise it will be
             // ignored other than number of questions which defaults to 10.
-            let questionParameter = ''
-            let difficultyParameter = ''
-            let categoryParameter = ''
+            const EMPTY_PARAMETER = ''
+            let questionParameter = EMPTY_PARAMETER
+            let difficultyParameter = EMPTY_PARAMETER
+            let categoryParameter = EMPTY_PARAMETER
             let questionTypeParameter = 10
             if (numberOfQuestions !== NONE){questionParameter = "amount=" + numberOfQuestions}
             if (difficulty !==NONE) {difficultyParameter = "&difficulty=" + difficulty}
@@ -61,10 +63,11 @@ export const Home = () => {
                 categoryParameter+
                 difficultyParameter+
                 questionTypeParameter
-
+            setLoadingOverlay(true)
             fetch(request).then(
                 async responses => {
                     responses = await responses.json()
+                    setLoadingOverlay(false)
                     switch (responses.response_code) {
                         case 0:
                             //The response is good
@@ -93,7 +96,10 @@ export const Home = () => {
                             throw new Error("The API returned an error code that is unable to be handled ");
                     }
                 }
-            ).catch(error => alert(error))
+            ).catch(
+                //In the event the API returns a non 0 response code, we display an alert.
+                error => alert(error)
+            )
 
         }
     }
@@ -134,14 +140,18 @@ export const Home = () => {
     //resets values causing the application to go to its initial state
         setQuestions([])
         setIncorrectQuestions([])
-        setCorrectQuestions()
+        setCorrectQuestions([])
         setQuestionsSet(false)
         setQuizIsDone(false)
+        setQuestionType(NONE)
+        setNumberOfQuestions(NONE)
+        setCategory(NONE)
+        setDifficulty(NONE)
     }
 
     function QuestionDisplay() {
         return <>
-            {(<div className={"HomePage"}>
+            {(<div className={"home-page"}>
                 <b>Quiz</b>
                 {questions.map(question => <div>
                     <b>{question.question}</b>{question.correctAndIncorrectAnswers.map(answer =>
@@ -156,7 +166,7 @@ export const Home = () => {
     }
 
     function NoQuestionsLoadedDisplay() {
-        return (<div className="HomePage">
+        return (<div className="home-page">
             <b>No Questions are loaded, what would you like to be quizzed on today?</b>
             <b>Category</b>
             <select onChange={e => setCategory(e.target.value)}>
@@ -192,20 +202,26 @@ export const Home = () => {
     }
 
     function EndGameOverlay() {
-        return (<div className="endgame_overlay">
+        return (<div className="endgame-overlay">
             <b>You got {quizScore}% of the questions correct</b>
             <br/>
             <b>Correct Questions:</b>
-            {correctQuestions.map(question => <div><i>{question}</i> <br/></div>)}
+            {correctQuestions.map(question => <div><i>{question[0]} {<b>{question[1]}</b>}</i> <br/></div>)}
             <br/>
             <b>Incorrect Questions (Your answer shown alongside):</b>
-            {incorrectQuestions.map(question => <div><i>{question}</i><br/></div>)}
+            {incorrectQuestions.map(question => <div><i>{question[0]} <b>{question[1]}</b></i><br/></div>)}
             <button onClick={endQuiz} className={"btn btn-primary"}>Done Reviewing Feedback</button>
         </div>);
     }
 
+    function LoadingScreen() {
+        return <div className={"loading-screen"}>
+            <b>Loading Data...</b>
+        </div>
+    }
+
     function BadNumericalInput() {
-        return <div className={"Warning"}>
+        return <div className={"warning"}>
             <b>The amount of questions must be a whole number above 0, no decimals </b>
             <button onClick={e => setIsBadNumericalInput(false)}>Confirm</button>
         </div>;
@@ -215,10 +231,43 @@ export const Home = () => {
     return (
         <div>
         <Navigation/>
-        {!questionsSet && <NoQuestionsLoadedDisplay/>}
+        {!questionsSet && (<div className="home-page">
+            <b>No Questions are loaded, what would you like to be quizzed on today?</b>
+            <b>Category</b>
+            <select onChange={e => setCategory(e.target.value)}>
+                <option>Select a category</option>
+                <option value="9">General Knowledge</option>
+                <option value="17">Science & Nature</option>
+                <option value="21">Sports</option>
+                <option value="25">Art</option>
+                <option value="23">History</option>
+            </select>
+            <b>Difficulty</b>
+            <select onChange={e => setDifficulty(e.target.value)}>
+                <option>Select a difficulty</option>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+            <b>Number of questions</b>
+            <input type="text" onChange={e => setNumberOfQuestions(e.target.value)}></input>
+            <b>Question Type</b>
+            <div className="form-check" onChange={e => setQuestionType(e.target.id)}>
+                <input type={"radio"} className="form-check-input" name="questionTypeSelection"
+                       id="boolean"></input>
+                <label className={"form-check-label"}>True/False</label>
+            </div>
+            <div className="form-check" onChange={e => setQuestionType(e.target.id)}>
+                <input type={"radio"} className="form-check-input" name="questionTypeSelection"
+                       id={"multiple"}></input>
+                <label className={"form-check-label"}>Multiple Choice</label>
+            </div>
+            <input type="submit" onClick={handleSubmit}/>
+        </div>)}
         {questionsSet && <QuestionDisplay/>}
         {quizIsDone && <EndGameOverlay/>}
             {isBadNumericalInput && <BadNumericalInput/>}
+            {isLoadingOverlayPresent && <LoadingScreen/>}
         </div>
     )
 }
