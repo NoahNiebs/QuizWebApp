@@ -46,3 +46,15 @@
   height: 90%;
   width: 60%;
 }
+
+.endgame_overlay {
+  position: fixed;
+  top: 65%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+  color: #000;
+  padding: 20px;
+  borderRadius: 8px;
+  zIndex: 999,
+}
